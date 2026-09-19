@@ -1,61 +1,74 @@
-/* Panadería Europa — catálogo, menú, estado de apertura y formulario de encargos */
+/* Panadería El Europa — catálogo, buscador, horarios y encargos */
 
-// --- Catálogo ---------------------------------------------------------------
+// --- Catálogo (solo pan) ----------------------------------------------------
 
 const PANES = [
   {
-    id: 'masa-madre',
-    nombre: 'Hogaza de masa madre',
-    etiqueta: 'El de siempre',
-    descripcion: 'Harina de trigo molida a la piedra, 36 horas de frío. Corteza gruesa y miga húmeda.',
-    precio: 4.60,
-    peso: '1 kg',
-    forma: 'hogaza'
+    id: 'bolillo',
+    nombre: 'Bolillo',
+    etiqueta: 'El de diario',
+    descripcion: 'Corteza delgada y crujiente, miga blanca. El de la torta de siempre.',
+    precio: 4,
+    peso: '90 g',
+    forma: 'bolillo'
+  },
+  {
+    id: 'telera',
+    nombre: 'Telera',
+    etiqueta: null,
+    descripcion: 'Blanda y con sus dos surcos marcados. Aguanta bien el relleno.',
+    precio: 4.5,
+    peso: '100 g',
+    forma: 'telera'
   },
   {
     id: 'baguette',
     nombre: 'Baguette tradición',
     etiqueta: null,
     descripcion: 'Masa poco hidratada y greñado a cuchilla. Mejor comerla el mismo día.',
-    precio: 1.80,
+    precio: 32,
     peso: '280 g',
     forma: 'baguette'
+  },
+  {
+    id: 'masa-madre',
+    nombre: 'Hogaza de masa madre',
+    etiqueta: 'La favorita',
+    descripcion: 'Harina de trigo molida a la piedra y 36 horas de frío. Corteza gruesa, miga húmeda.',
+    precio: 75,
+    peso: '1 kg',
+    forma: 'hogaza'
   },
   {
     id: 'centeno',
     nombre: 'Pan de centeno y semillas',
     etiqueta: 'Integral',
-    descripcion: '80 % centeno con lino, girasol y sésamo. Denso, aromático y aguanta toda la semana.',
-    precio: 5.20,
+    descripcion: '80 % centeno con linaza, girasol y ajonjolí. Denso y aguanta toda la semana.',
+    precio: 85,
     peso: '900 g',
     forma: 'molde'
-  },
-  {
-    id: 'croissant',
-    nombre: 'Croissant de mantequilla',
-    etiqueta: null,
-    descripcion: 'Laminado a mano con mantequilla de pasto. Sale del horno a las 7:00 y a las 11:30.',
-    precio: 1.95,
-    peso: '85 g',
-    forma: 'croissant'
   },
   {
     id: 'especial',
     nombre: 'Hornada especial',
     etiqueta: 'Cada semana',
-    descripcion: 'Esta semana: trenza de espelta con nueces y pasas. Cantidad limitada, se reserva.',
-    precio: 6.40,
+    descripcion: 'Esta semana: trenza de espelta con nuez. Cantidad limitada, se aparta.',
+    precio: 95,
     peso: '750 g',
     forma: 'trenza'
   }
 ];
 
 const FORMAS = {
-  hogaza: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <ellipse cx="60" cy="60" rx="48" ry="34" fill="#d9a05b"/>
-    <ellipse cx="60" cy="55" rx="48" ry="32" fill="#e3b374"/>
-    <g stroke="#8b5424" stroke-width="4" stroke-linecap="round" opacity=".7">
-      <path d="M36 44l-7 20"/><path d="M53 40l-7 24"/><path d="M70 40l-7 24"/><path d="M87 44l-7 20"/>
+  bolillo: `<svg viewBox="0 0 120 100" aria-hidden="true">
+    <ellipse cx="60" cy="52" rx="44" ry="21" fill="#e3b374"/>
+    <path d="M22 52c10-8 24-12 38-12s28 4 38 12" fill="none" stroke="#d9a05b" stroke-width="10" stroke-linecap="round"/>
+    <path d="M34 48h52" stroke="#8b5424" stroke-width="4" stroke-linecap="round" opacity=".75"/>
+  </svg>`,
+  telera: `<svg viewBox="0 0 120 100" aria-hidden="true">
+    <ellipse cx="60" cy="52" rx="46" ry="23" fill="#e8c08a"/>
+    <g stroke="#b8793a" stroke-width="4" stroke-linecap="round" opacity=".8">
+      <path d="M32 44h56"/><path d="M32 60h56"/>
     </g>
   </svg>`,
   baguette: `<svg viewBox="0 0 120 100" aria-hidden="true">
@@ -63,6 +76,13 @@ const FORMAS = {
     <path d="M12 51h96" stroke="#d9a05b" stroke-width="26" stroke-linecap="round" opacity=".35"/>
     <g stroke="#8b5424" stroke-width="3.5" stroke-linecap="round" opacity=".75">
       <path d="M28 46l8 9"/><path d="M48 44l8 11"/><path d="M68 44l8 11"/><path d="M88 46l8 9"/>
+    </g>
+  </svg>`,
+  hogaza: `<svg viewBox="0 0 120 100" aria-hidden="true">
+    <ellipse cx="60" cy="60" rx="48" ry="34" fill="#d9a05b"/>
+    <ellipse cx="60" cy="55" rx="48" ry="32" fill="#e3b374"/>
+    <g stroke="#8b5424" stroke-width="4" stroke-linecap="round" opacity=".7">
+      <path d="M36 44l-7 20"/><path d="M53 40l-7 24"/><path d="M70 40l-7 24"/><path d="M87 44l-7 20"/>
     </g>
   </svg>`,
   molde: `<svg viewBox="0 0 120 100" aria-hidden="true">
@@ -73,10 +93,6 @@ const FORMAS = {
       <circle cx="76" cy="44" r="2.6"/><circle cx="58" cy="50" r="2.6"/>
       <circle cx="40" cy="55" r="2.6"/><circle cx="80" cy="57" r="2.6"/>
     </g>
-  </svg>`,
-  croissant: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <path d="M22 66c6-22 22-34 38-34s32 12 38 34c-10-6-20-4-26 2-8-8-16-8-24 0-6-6-16-8-26-2z" fill="#e3b374"/>
-    <path d="M42 40c6 6 8 14 6 24M60 34c2 8 2 18-2 26M78 40c-6 6-8 14-6 24" stroke="#b8793a" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".75"/>
   </svg>`,
   trenza: `<svg viewBox="0 0 120 100" aria-hidden="true">
     <g stroke="#e3b374" stroke-width="20" stroke-linecap="round" fill="none">
@@ -91,24 +107,29 @@ const FORMAS = {
   </svg>`
 };
 
-const EUR_FMT = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR' });
+const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
 
-function pintarPanes() {
-  const grid = document.getElementById('bread-grid');
-  if (!grid) return;
-
-  grid.innerHTML = PANES.map((pan) => `
-    <li class="bread-card">
+function tarjeta(pan) {
+  return `
+    <li class="bread-card" data-id="${pan.id}">
       <div class="art">${FORMAS[pan.forma] || ''}</div>
-      ${pan.etiqueta ? `<span class="tag">${pan.etiqueta}</span>` : ''}
+      <span class="tag${pan.etiqueta ? '' : ' tag-empty'}" ${pan.etiqueta ? '' : 'aria-hidden="true"'}>${pan.etiqueta || '—'}</span>
       <h3>${pan.nombre}</h3>
       <p class="desc">${pan.descripcion}</p>
       <div class="meta">
-        <span class="price">${EUR_FMT.format(pan.precio)}</span>
+        <span class="price">${MXN.format(pan.precio)}</span>
         <span class="weight">${pan.peso}</span>
       </div>
-    </li>
-  `).join('');
+    </li>`;
+}
+
+function pintarPanes(lista = PANES) {
+  const grid = document.getElementById('bread-grid');
+  const vacio = document.getElementById('empty-msg');
+  if (!grid) return;
+
+  grid.innerHTML = lista.map(tarjeta).join('');
+  if (vacio) vacio.hidden = lista.length > 0;
 }
 
 function rellenarSelector() {
@@ -117,10 +138,56 @@ function rellenarSelector() {
 
   select.innerHTML =
     '<option value="">Elige un pan…</option>' +
-    PANES.map((pan) => `<option value="${pan.id}">${pan.nombre} — ${EUR_FMT.format(pan.precio)}</option>`).join('');
+    PANES.map((pan) => `<option value="${pan.id}">${pan.nombre} — ${MXN.format(pan.precio)}</option>`).join('');
 }
 
-// --- Menú en móvil ---------------------------------------------------------
+// --- Buscador ---------------------------------------------------------------
+
+function normalizar(texto) {
+  return texto.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().trim();
+}
+
+function activarBuscador() {
+  const toggle = document.getElementById('search-toggle');
+  const panel = document.getElementById('search-panel');
+  const input = document.getElementById('search-input');
+  const hint = document.getElementById('search-hint');
+  if (!toggle || !panel || !input) return;
+
+  toggle.addEventListener('click', () => {
+    const abierto = panel.hidden;
+    panel.hidden = !abierto;
+    toggle.setAttribute('aria-expanded', String(abierto));
+    if (abierto) input.focus();
+  });
+
+  input.addEventListener('input', () => {
+    const q = normalizar(input.value);
+    const lista = q
+      ? PANES.filter((pan) => normalizar(`${pan.nombre} ${pan.descripcion} ${pan.etiqueta || ''}`).includes(q))
+      : PANES;
+
+    pintarPanes(lista);
+    if (hint) {
+      hint.textContent = q
+        ? `${lista.length} ${lista.length === 1 ? 'pan encontrado' : 'panes encontrados'}.`
+        : 'Escribe para filtrar el pan del día.';
+    }
+    if (q) document.getElementById('panes')?.scrollIntoView({ block: 'start' });
+  });
+
+  input.addEventListener('keydown', (ev) => {
+    if (ev.key === 'Escape') {
+      input.value = '';
+      pintarPanes();
+      panel.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.focus();
+    }
+  });
+}
+
+// --- Menú en móvil ----------------------------------------------------------
 
 function activarMenu() {
   const toggle = document.querySelector('.nav-toggle');
@@ -146,7 +213,7 @@ function activarMenu() {
   });
 }
 
-// --- ¿Estamos abiertos? ----------------------------------------------------
+// --- ¿Estamos abiertos? -----------------------------------------------------
 
 // Minutos desde medianoche, por día de la semana (0 = domingo).
 const HORARIO = {
@@ -201,12 +268,11 @@ function actualizarEstado(ahora = new Date()) {
   }
 }
 
-// --- Formulario de encargos ------------------------------------------------
+// --- Formulario de encargos -------------------------------------------------
 
 function hoyISO() {
   const d = new Date();
-  const offset = d.getTimezoneOffset() * 60000;
-  return new Date(d.getTime() - offset).toISOString().slice(0, 10);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
 
 const REGLAS = {
@@ -223,8 +289,7 @@ const REGLAS = {
   fecha: (v) => {
     if (!v) return 'Dinos qué día lo recoges.';
     if (v < hoyISO()) return 'Elige una fecha de hoy en adelante.';
-    const dia = new Date(`${v}T12:00:00`).getDay();
-    if (HORARIO[dia].length === 0) return 'Los lunes está cerrado, elige otro día.';
+    if (HORARIO[new Date(`${v}T12:00:00`).getDay()].length === 0) return 'Los lunes cerramos, elige otro día.';
     return '';
   }
 };
@@ -252,9 +317,7 @@ function activarFormulario() {
     if (!campo) return;
     campo.addEventListener('blur', () => mostrarError(campo, REGLAS[nombre](campo.value)));
     campo.addEventListener('input', () => {
-      if (campo.getAttribute('aria-invalid') === 'true') {
-        mostrarError(campo, REGLAS[nombre](campo.value));
-      }
+      if (campo.getAttribute('aria-invalid') === 'true') mostrarError(campo, REGLAS[nombre](campo.value));
     });
   });
 
@@ -279,25 +342,54 @@ function activarFormulario() {
 
     const pan = PANES.find((p) => p.id === form.elements.pan.value);
     const cantidad = Number(form.elements.cantidad.value);
-    const total = EUR_FMT.format(pan.precio * cantidad);
 
     estado.className = 'form-status ok';
     estado.textContent =
-      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${pan.nombre} (${total}). ` +
-      `Te llamamos al ${form.elements.telefono.value.trim()} para confirmar.`;
+      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${pan.nombre} ` +
+      `(${MXN.format(pan.precio * cantidad)}). Te llamamos al ${form.elements.telefono.value.trim()} para confirmar.`;
 
     form.reset();
     if (fecha) fecha.value = hoyISO();
   });
 }
 
-// --- Arranque --------------------------------------------------------------
+// --- Volver arriba y cookies ------------------------------------------------
+
+function activarVolverArriba() {
+  const boton = document.getElementById('to-top');
+  if (!boton) return;
+
+  const revisar = () => { boton.hidden = window.scrollY < 600; };
+  revisar();
+  window.addEventListener('scroll', revisar, { passive: true });
+  boton.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+function activarCookies() {
+  const aviso = document.getElementById('cookies');
+  const boton = document.getElementById('cookies-ok');
+  if (!aviso || !boton) return;
+
+  let aceptado = false;
+  try { aceptado = localStorage.getItem('cookies-ok') === '1'; } catch { /* modo privado */ }
+
+  aviso.hidden = aceptado;
+  boton.addEventListener('click', () => {
+    aviso.hidden = true;
+    try { localStorage.setItem('cookies-ok', '1'); } catch { /* modo privado */ }
+  });
+}
+
+// --- Arranque ---------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
   pintarPanes();
   rellenarSelector();
+  activarBuscador();
   activarMenu();
   actualizarEstado();
   activarFormulario();
+  activarVolverArriba();
+  activarCookies();
   setInterval(() => actualizarEstado(), 60000);
 });
