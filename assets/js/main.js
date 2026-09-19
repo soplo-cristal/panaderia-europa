@@ -1,118 +1,98 @@
 /* Panadería El Europa — catálogo, buscador, horarios y encargos */
 
-// --- Catálogo (solo pan) ----------------------------------------------------
+// --- Catálogo (fotos reales de la panadería) --------------------------------
 
 const PANES = [
   {
+    id: 'concha',
+    nombre: 'Concha',
+    etiqueta: 'La de siempre',
+    descripcion: 'Masa suave y costra de vainilla marcada una por una. La que se acaba primero.',
+    precio: 18,
+    peso: '90 g',
+    foto: 'pan-concha.jpg'
+  },
+  {
+    id: 'concha-choco',
+    nombre: 'Concha de chocolate',
+    etiqueta: null,
+    descripcion: 'La misma masa con costra de chocolate. También la hacemos mitad y mitad.',
+    precio: 18,
+    peso: '90 g',
+    foto: 'pan-concha-choco.jpg'
+  },
+  {
+    id: 'cuernito',
+    nombre: 'Cuernito',
+    etiqueta: 'Recién horneado',
+    descripcion: 'Masa laminada con mantequilla, enrollada a mano. Hojaldrado y crujiente.',
+    precio: 22,
+    peso: '80 g',
+    foto: 'pan-cuernito.jpg'
+  },
+  {
+    id: 'oreja',
+    nombre: 'Oreja',
+    etiqueta: null,
+    descripcion: 'Hojaldre doblado y caramelizado en el horno. Dorada por fuera, suave por dentro.',
+    precio: 20,
+    peso: '60 g',
+    foto: 'pan-oreja.jpg'
+  },
+  {
+    id: 'banderilla',
+    nombre: 'Banderilla',
+    etiqueta: null,
+    descripcion: 'Hojaldre glaseado con azúcar. Del mismo laminado que el cuernito.',
+    precio: 22,
+    peso: '70 g',
+    foto: 'pan-banderilla.jpg'
+  },
+  {
     id: 'bolillo',
     nombre: 'Bolillo',
-    etiqueta: 'El de diario',
+    etiqueta: 'Pan de sal',
     descripcion: 'Corteza delgada y crujiente, miga blanca. El de la torta de siempre.',
     precio: 4,
     peso: '90 g',
-    forma: 'bolillo'
+    foto: 'pan-bolillo.jpg'
   },
   {
-    id: 'telera',
-    nombre: 'Telera',
-    etiqueta: null,
-    descripcion: 'Blanda y con sus dos surcos marcados. Aguanta bien el relleno.',
-    precio: 4.5,
-    peso: '100 g',
-    forma: 'telera'
+    id: 'fresas',
+    nombre: 'Cuernito de fresas con crema',
+    etiqueta: 'Por encargo',
+    descripcion: 'Cuernito abierto, relleno de crema batida y fresa natural. Se prepara al momento.',
+    precio: 65,
+    peso: '1 pieza',
+    foto: 'pan-fresas.jpg'
   },
   {
-    id: 'baguette',
-    nombre: 'Baguette tradición',
-    etiqueta: null,
-    descripcion: 'Masa poco hidratada y greñado a cuchilla. Mejor comerla el mismo día.',
-    precio: 32,
-    peso: '280 g',
-    forma: 'baguette'
+    id: 'muerto',
+    nombre: 'Pan de muerto',
+    etiqueta: 'Temporada',
+    descripcion: 'Con su azúcar encima y aroma de azahar. De octubre a principios de noviembre.',
+    precio: 30,
+    peso: '150 g',
+    foto: 'pan-muerto.jpg'
   },
   {
-    id: 'masa-madre',
-    nombre: 'Hogaza de masa madre',
-    etiqueta: 'La favorita',
-    descripcion: 'Harina de trigo molida a la piedra y 36 horas de frío. Corteza gruesa, miga húmeda.',
-    precio: 75,
-    peso: '1 kg',
-    forma: 'hogaza'
-  },
-  {
-    id: 'centeno',
-    nombre: 'Pan de centeno y semillas',
-    etiqueta: 'Integral',
-    descripcion: '80 % centeno con linaza, girasol y ajonjolí. Denso y aguanta toda la semana.',
-    precio: 85,
-    peso: '900 g',
-    forma: 'molde'
-  },
-  {
-    id: 'especial',
-    nombre: 'Hornada especial',
-    etiqueta: 'Cada semana',
-    descripcion: 'Esta semana: trenza de espelta con nuez. Cantidad limitada, se aparta.',
-    precio: 95,
-    peso: '750 g',
-    forma: 'trenza'
+    id: 'rosca',
+    nombre: 'Rosca de reyes',
+    etiqueta: 'Temporada',
+    descripcion: 'Con ate, higo y su muñequito. En enero y solo por encargo anticipado.',
+    precio: 190,
+    peso: 'mediana, 8 personas',
+    foto: 'pan-rosca.jpg'
   }
 ];
-
-const FORMAS = {
-  bolillo: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <ellipse cx="60" cy="52" rx="44" ry="21" fill="#e3b374"/>
-    <path d="M22 52c10-8 24-12 38-12s28 4 38 12" fill="none" stroke="#d9a05b" stroke-width="10" stroke-linecap="round"/>
-    <path d="M34 48h52" stroke="#8b5424" stroke-width="4" stroke-linecap="round" opacity=".75"/>
-  </svg>`,
-  telera: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <ellipse cx="60" cy="52" rx="46" ry="23" fill="#e8c08a"/>
-    <g stroke="#b8793a" stroke-width="4" stroke-linecap="round" opacity=".8">
-      <path d="M32 44h56"/><path d="M32 60h56"/>
-    </g>
-  </svg>`,
-  baguette: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <rect x="12" y="38" width="96" height="26" rx="13" fill="#e3b374"/>
-    <path d="M12 51h96" stroke="#d9a05b" stroke-width="26" stroke-linecap="round" opacity=".35"/>
-    <g stroke="#8b5424" stroke-width="3.5" stroke-linecap="round" opacity=".75">
-      <path d="M28 46l8 9"/><path d="M48 44l8 11"/><path d="M68 44l8 11"/><path d="M88 46l8 9"/>
-    </g>
-  </svg>`,
-  hogaza: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <ellipse cx="60" cy="60" rx="48" ry="34" fill="#d9a05b"/>
-    <ellipse cx="60" cy="55" rx="48" ry="32" fill="#e3b374"/>
-    <g stroke="#8b5424" stroke-width="4" stroke-linecap="round" opacity=".7">
-      <path d="M36 44l-7 20"/><path d="M53 40l-7 24"/><path d="M70 40l-7 24"/><path d="M87 44l-7 20"/>
-    </g>
-  </svg>`,
-  molde: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <path d="M24 70V44c0-12 16-18 36-18s36 6 36 18v26z" fill="#c98f4e"/>
-    <path d="M24 66V44c0-12 16-18 36-18s36 6 36 18v22z" fill="#dda86a"/>
-    <g fill="#6d431c" opacity=".7">
-      <circle cx="46" cy="42" r="2.6"/><circle cx="62" cy="36" r="2.6"/>
-      <circle cx="76" cy="44" r="2.6"/><circle cx="58" cy="50" r="2.6"/>
-      <circle cx="40" cy="55" r="2.6"/><circle cx="80" cy="57" r="2.6"/>
-    </g>
-  </svg>`,
-  trenza: `<svg viewBox="0 0 120 100" aria-hidden="true">
-    <g stroke="#e3b374" stroke-width="20" stroke-linecap="round" fill="none">
-      <path d="M20 56c14-14 26 14 40 0s26 14 40 0"/>
-    </g>
-    <g stroke="#c98f4e" stroke-width="5" stroke-linecap="round" fill="none" opacity=".8">
-      <path d="M20 56c14-14 26 14 40 0s26 14 40 0"/>
-    </g>
-    <g fill="#7a4a1e" opacity=".65">
-      <circle cx="38" cy="50" r="2.4"/><circle cx="60" cy="56" r="2.4"/><circle cx="82" cy="50" r="2.4"/>
-    </g>
-  </svg>`
-};
 
 const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
 
 function tarjeta(pan) {
   return `
     <li class="bread-card" data-id="${pan.id}">
-      <div class="art">${FORMAS[pan.forma] || ''}</div>
+      <img class="art" src="assets/img/${pan.foto}" alt="${pan.nombre} de Panadería El Europa"
+           width="700" height="525" loading="lazy" decoding="async">
       <span class="tag${pan.etiqueta ? '' : ' tag-empty'}" ${pan.etiqueta ? '' : 'aria-hidden="true"'}>${pan.etiqueta || '—'}</span>
       <h3>${pan.nombre}</h3>
       <p class="desc">${pan.descripcion}</p>

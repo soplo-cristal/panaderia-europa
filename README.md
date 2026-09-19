@@ -13,7 +13,7 @@ HTML, CSS y JavaScript puros: sin dependencias ni paso de compilación.
 ```
 index.html            Página completa
 assets/css/styles.css Estilos (paleta del logo: café #723602 y ámbar #ffb748)
-assets/img/            Logo, favicon e icono para iOS
+assets/img/            Logo, favicon y fotos de la panadería
 assets/js/main.js     Catálogo, buscador, horarios, formulario, cookies, volver arriba
 ```
 
@@ -47,17 +47,18 @@ logo, vuelve a generarlos en 64 y 180 píxeles.
 
 ## Fotos
 
-Las imágenes son marcadores de posición hechos con gradientes. Para poner fotos reales,
-guárdalas en `assets/img/` y añade en `styles.css`:
+Las fotos son de la propia panadería (extraídas de los PDF que mandó el dueño,
+recortadas y optimizadas para web). Están en `assets/img/`:
 
-```css
-[data-photo="hero"]   { background-image: url("../img/hero.jpg"); }
-[data-photo="tienda"] { background-image: url("../img/tienda.jpg"); }
-[data-photo="horno"]  { background-image: url("../img/horno.jpg"); }
-[data-photo="post1"]  { background-image: url("../img/post1.jpg"); }
-```
+- `hero.jpg` — portada
+- `obrador-1.jpg`, `obrador-2.jpg` — sección "Nosotros"
+- `blog-muerto.jpg`, `blog-rosca.jpg`, `blog-cuernito.jpg` — tarjetas del blog
+- `pan-*.jpg` — una por producto del catálogo
 
-Los marcadores son `hero`, `tienda`, `horno`, `post1`, `post2` y `post3`.
+Las de portada, obrador y blog se asignan por CSS (`[data-photo="…"]`); las de
+producto van en el campo `foto` de cada pan en `main.js`. Para cambiar una,
+basta con sustituir el archivo respetando el nombre y una proporción parecida
+(16:9 la portada, 4:3 las de producto, 16:10 las del blog).
 
 ## Formulario de encargos
 
