@@ -12,7 +12,8 @@ HTML, CSS y JavaScript puros: sin dependencias ni paso de compilación.
 
 ```
 index.html            Página completa
-assets/css/styles.css Estilos (paleta vino/kraft/crema, adaptable a móvil)
+assets/css/styles.css Estilos (paleta del logo: café #723602 y ámbar #ffb748)
+assets/img/            Logo, favicon e icono para iOS
 assets/js/main.js     Catálogo, buscador, horarios, formulario, cookies, volver arriba
 ```
 
@@ -35,6 +36,14 @@ python3 -m http.server 8000
 - **Dirección, teléfono y correo**: en las secciones `#sucursal` y `#encargo`, en la
   barra superior y en el pie de `index.html`.
 - **Blog**: las tres tarjetas están escritas directamente en el HTML, dentro de `#blog`.
+
+## Logo y colores
+
+El logo está en `assets/img/logo.jpg` y se usa en la cabecera, el hero y el pie.
+De él salen los colores de la marca, definidos en `:root` de `styles.css`:
+`--brand: #723602` (café) y `--amber: #ffb748`. `favicon.png` y
+`apple-touch-icon.png` se generaron a partir del mismo archivo; si cambias el
+logo, vuelve a generarlos en 64 y 180 píxeles.
 
 ## Fotos
 
