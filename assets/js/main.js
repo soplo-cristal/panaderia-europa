@@ -3,16 +3,17 @@
 // --- Rellenos del croissant -------------------------------------------------
 
 const RELLENOS = [
-  { id: 'jamon',     nombre: 'Jamón y queso',      extra: 20, tipo: 'salado', nota: 'El salado de la casa. Se hornea con el queso adentro.' },
-  { id: 'turin',     nombre: 'Chocolate Turín',    extra: 15, tipo: 'dulce',  nota: 'Chocolate Turín derretido, generoso.' },
-  { id: 'magnum',    nombre: 'Paleta Magnum',      extra: 25, tipo: 'dulce',  nota: 'La paleta entera dentro del croissant.' },
-  { id: 'fresas',    nombre: 'Fresas con crema',   extra: 20, tipo: 'dulce',  nota: 'Fresa natural y crema batida, al momento.' },
-  { id: 'frambuesa', nombre: 'Frambuesa con queso',extra: 20, tipo: 'dulce',  nota: 'Frambuesa y queso crema, dulce y ácido.' },
-  { id: 'rojos',     nombre: 'Frutos rojos',       extra: 20, tipo: 'dulce',  nota: 'Mezcla de frutos rojos de temporada.' },
-  { id: 'pastelera', nombre: 'Crema pastelera',    extra: 15, tipo: 'dulce',  nota: 'Hecha en casa, con vainilla.' },
-  { id: 'cajeta',    nombre: 'Cajeta',             extra: 15, tipo: 'dulce',  nota: 'Cajeta quemada, para los golosos.' },
-  { id: 'pina',      nombre: 'Piña',               extra: 15, tipo: 'dulce',  nota: 'Piña cocida en su jugo, nada empalagosa.' }
+  { id: 'jamon',     nombre: 'Jamón y queso',       tipo: 'salado', nota: 'El salado de la casa. Se hornea con el queso adentro.' },
+  { id: 'turin',     nombre: 'Chocolate Turín',     tipo: 'dulce',  nota: 'Chocolate Turín derretido, generoso.' },
+  { id: 'magnum',    nombre: 'Paleta Magnum',       tipo: 'dulce',  nota: 'La paleta entera dentro del croissant.' },
+  { id: 'fresas',    nombre: 'Fresas con crema',    tipo: 'dulce',  nota: 'Fresa natural y crema batida, al momento.' },
+  { id: 'frambuesa', nombre: 'Frambuesa con queso', tipo: 'dulce',  nota: 'Frambuesa y queso crema, dulce y ácido.' },
+  { id: 'rojos',     nombre: 'Frutos rojos',        tipo: 'dulce',  nota: 'Mezcla de frutos rojos de temporada.' },
+  { id: 'pastelera', nombre: 'Crema pastelera',     tipo: 'dulce',  nota: 'Hecha en casa, con vainilla.' },
+  { id: 'cajeta',    nombre: 'Cajeta',              tipo: 'dulce',  nota: 'Cajeta quemada, para los golosos.' },
+  { id: 'pina',      nombre: 'Piña',                tipo: 'dulce',  nota: 'Piña cocida en su jugo, nada empalagosa.' }
 ];
+
 
 
 // --- Catálogo (fotos reales de la panadería) --------------------------------
@@ -23,7 +24,7 @@ const PANES = [
     nombre: 'Chocolatín',
     etiqueta: 'La especialidad',
     descripcion: 'Masa laminada con mantequilla y su barra de chocolate adentro. Lo que mejor hacemos.',
-    precio: 28,
+    precio: 20,
     peso: '85 g',
     foto: 'pan-chocolatin.jpg'
   },
@@ -32,7 +33,7 @@ const PANES = [
     nombre: 'Croissant',
     etiqueta: 'La especialidad',
     descripcion: 'Laminado a mano, enrollado uno por uno y horneado hasta que truena al partirlo.',
-    precio: 25,
+    precio: 20,
     peso: '80 g',
     foto: 'pan-croissant.jpg'
   },
@@ -40,8 +41,8 @@ const PANES = [
     id: 'croissant-relleno',
     nombre: 'Croissant relleno',
     etiqueta: 'Elige tu relleno',
-    descripcion: 'El mismo croissant, abierto y relleno al momento. Nueve rellenos a elegir, uno salado.',
-    precio: 35,
+    descripcion: 'El mismo croissant, relleno de lo que pidas. Nueve rellenos a elegir y ninguno cuesta extra.',
+    precio: 20,
     peso: '1 pieza',
     foto: 'pan-relleno.jpg',
     rellenable: true
@@ -134,10 +135,7 @@ function pintarRellenos() {
 
   grid.innerHTML = RELLENOS.map((r) => `
     <li class="relleno relleno-${r.tipo}" data-relleno="${r.id}">
-      <div class="relleno-cab">
-        <h3>${r.nombre}</h3>
-        <span class="relleno-extra">+ ${MXN.format(r.extra)}</span>
-      </div>
+      <h3>${r.nombre}</h3>
       <p>${r.nota}</p>
       ${r.tipo === 'salado' ? '<span class="relleno-tipo">Salado</span>' : ''}
     </li>`).join('');
@@ -329,7 +327,7 @@ function activarRellenoEnFormulario(form) {
   if (!campo || !select) return;
 
   select.innerHTML = RELLENOS.map(
-    (r) => `<option value="${r.id}">${r.nombre} (+ ${MXN.format(r.extra)})</option>`
+    (r) => `<option value="${r.id}">${r.nombre}</option>`
   ).join('');
 
   const revisar = () => {
@@ -385,7 +383,7 @@ function activarFormulario() {
     const relleno = pan.rellenable
       ? RELLENOS.find((r) => r.id === form.elements.relleno.value)
       : null;
-    const total = (pan.precio + (relleno ? relleno.extra : 0)) * cantidad;
+    const total = pan.precio * cantidad;
 
     estado.className = 'form-status ok';
     estado.textContent =
