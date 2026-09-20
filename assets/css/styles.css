@@ -352,24 +352,35 @@ address { font-style: normal; }
 /* ---------- Rellenos ---------- */
 
 .rellenos-grid {
-  display: grid; grid-template-columns: 1.1fr .9fr;
-  gap: clamp(1.5rem, 4vw, 3rem); align-items: center;
+  display: grid; grid-template-columns: .78fr 1.22fr;
+  gap: clamp(1.5rem, 3.5vw, 2.6rem); align-items: start;
 }
-.relleno-lista { display: grid; gap: .9rem; margin: 0; padding: 0; list-style: none; }
+.rellenos-grid .photo { aspect-ratio: 3 / 4; position: sticky; top: calc(var(--header-h) + 1.5rem); }
+
+.relleno-lista {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+  gap: .85rem; margin: 0; padding: 0; list-style: none;
+}
 .relleno {
   position: relative;
-  padding: 1.1rem 6.5rem 1.1rem 1.3rem;
+  padding: 1rem 1.2rem;
   background: var(--white);
   border-left: 4px solid var(--amber);
   border-radius: 0 var(--radius) var(--radius) 0;
 }
-.relleno h3 { margin: 0 0 .15rem; font-size: 1.05rem; }
-.relleno p { margin: 0; font-size: .9rem; color: var(--ink-soft); }
-.relleno-extra {
-  position: absolute; right: 1.2rem; top: 50%; transform: translateY(-50%);
-  font-weight: 600; color: var(--brand); white-space: nowrap;
+.relleno-salado { border-left-color: var(--brand); }
+.relleno-cab {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: .6rem; margin-bottom: .2rem;
 }
-.rellenos-grid .photo { aspect-ratio: 4 / 3; }
+.relleno h3 { margin: 0; font-size: 1rem; }
+.relleno p { margin: 0; font-size: .87rem; color: var(--ink-soft); }
+.relleno-extra { font-weight: 600; font-size: .95rem; color: var(--brand); white-space: nowrap; }
+.relleno-tipo {
+  display: inline-block; margin-top: .5rem; padding: .1rem .5rem;
+  font-size: .64rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--white); background: var(--brand); border-radius: 2px;
+}
 
 /* ---------- Cómo pedir ---------- */
 
@@ -541,6 +552,7 @@ address { font-style: normal; }
 @media (max-width: 900px) {
   .perks-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
   .about-grid, .pedidos-grid, .encargo-grid, .rellenos-grid { grid-template-columns: 1fr; }
+  .rellenos-grid .photo { position: static; aspect-ratio: 16 / 10; }
   .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 1.8rem; }
   .aviso-pedidos { grid-column: auto; }
 }

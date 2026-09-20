@@ -3,11 +3,17 @@
 // --- Rellenos del croissant -------------------------------------------------
 
 const RELLENOS = [
-  { id: 'magnum',   nombre: 'Paleta Magnum',       extra: 25, nota: 'La paleta entera dentro del croissant.' },
-  { id: 'chocolate',nombre: 'Chocolate',            extra: 10, nota: 'Chocolate derretido, el de siempre.' },
-  { id: 'pastelera',nombre: 'Crema pastelera',      extra: 10, nota: 'Hecha en casa, con vainilla.' },
-  { id: 'zarzamora',nombre: 'Zarzamora con queso',  extra: 15, nota: 'Zarzamora natural y queso crema.' }
+  { id: 'jamon',     nombre: 'Jamón y queso',      extra: 20, tipo: 'salado', nota: 'El salado de la casa. Se hornea con el queso adentro.' },
+  { id: 'turin',     nombre: 'Chocolate Turín',    extra: 15, tipo: 'dulce',  nota: 'Chocolate Turín derretido, generoso.' },
+  { id: 'magnum',    nombre: 'Paleta Magnum',      extra: 25, tipo: 'dulce',  nota: 'La paleta entera dentro del croissant.' },
+  { id: 'fresas',    nombre: 'Fresas con crema',   extra: 20, tipo: 'dulce',  nota: 'Fresa natural y crema batida, al momento.' },
+  { id: 'frambuesa', nombre: 'Frambuesa con queso',extra: 20, tipo: 'dulce',  nota: 'Frambuesa y queso crema, dulce y ácido.' },
+  { id: 'rojos',     nombre: 'Frutos rojos',       extra: 20, tipo: 'dulce',  nota: 'Mezcla de frutos rojos de temporada.' },
+  { id: 'pastelera', nombre: 'Crema pastelera',    extra: 15, tipo: 'dulce',  nota: 'Hecha en casa, con vainilla.' },
+  { id: 'cajeta',    nombre: 'Cajeta',             extra: 15, tipo: 'dulce',  nota: 'Cajeta quemada, para los golosos.' },
+  { id: 'pina',      nombre: 'Piña',               extra: 15, tipo: 'dulce',  nota: 'Piña cocida en su jugo, nada empalagosa.' }
 ];
+
 
 // --- Catálogo (fotos reales de la panadería) --------------------------------
 
@@ -34,7 +40,7 @@ const PANES = [
     id: 'croissant-relleno',
     nombre: 'Croissant relleno',
     etiqueta: 'Elige tu relleno',
-    descripcion: 'El mismo croissant, abierto y relleno al momento. Cuatro rellenos a elegir.',
+    descripcion: 'El mismo croissant, abierto y relleno al momento. Nueve rellenos a elegir, uno salado.',
     precio: 35,
     peso: '1 pieza',
     foto: 'pan-relleno.jpg',
@@ -127,10 +133,13 @@ function pintarRellenos() {
   if (!grid) return;
 
   grid.innerHTML = RELLENOS.map((r) => `
-    <li class="relleno" data-relleno="${r.id}">
-      <h3>${r.nombre}</h3>
+    <li class="relleno relleno-${r.tipo}" data-relleno="${r.id}">
+      <div class="relleno-cab">
+        <h3>${r.nombre}</h3>
+        <span class="relleno-extra">+ ${MXN.format(r.extra)}</span>
+      </div>
       <p>${r.nota}</p>
-      <span class="relleno-extra">+ ${MXN.format(r.extra)}</span>
+      ${r.tipo === 'salado' ? '<span class="relleno-tipo">Salado</span>' : ''}
     </li>`).join('');
 }
 
