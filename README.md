@@ -1,10 +1,13 @@
 # Panadería El Europa
 
-Sitio web de una sola página para la panadería **El Europa** (abierta en 2022, solo pan,
-sin repostería). Estructura y estilo inspirados en sitios de panadería mexicanos:
-barra superior, menú fijo con buscador, hero a sangre completa, franja de garantías,
-historia, catálogo, blog, sucursal con horarios en vivo, formulario de encargo,
-footer de columnas y aviso de cookies.
+Sitio web de una sola página para la panadería **El Europa** (desde 2022). No hay
+sucursal: todo se hornea por encargo. La especialidad son los **chocolatines** y los
+**croissants rellenos** (paleta Magnum, chocolate, crema pastelera o zarzamora con
+queso), además del pan dulce de diario y el de temporada.
+
+Secciones: barra superior, menú fijo con buscador, portada, franja de ventajas,
+historia, catálogo, rellenos, proceso, blog, cómo pedir, formulario de encargo,
+pie de columnas y aviso de cookies.
 
 HTML, CSS y JavaScript puros: sin dependencias ni paso de compilación.
 
@@ -26,15 +29,17 @@ python3 -m http.server 8000
 
 ## Cómo editar el contenido
 
+- **Rellenos del croissant**: array `RELLENOS` al principio de `assets/js/main.js`.
+  Alimentan la sección "Elige tu relleno" y el selector que aparece en el formulario
+  cuando se encarga un croissant relleno (el pan lo activa con `rellenable: true`).
 - **Pan, precios y descripciones**: array `PANES` al principio de `assets/js/main.js`.
   Cada pan indica una `forma` que corresponde a una ilustración SVG del objeto `FORMAS`
   (`bolillo`, `telera`, `baguette`, `hogaza`, `molde`, `trenza`). Los precios están en
   pesos mexicanos (`Intl.NumberFormat('es-MX')`); cambia esa línea para otra moneda.
-- **Horarios**: hay dos lugares que deben coincidir — la tabla de `index.html` (lo que
-  se lee) y el objeto `HORARIO` de `main.js` (lo que calcula el letrero de
-  abierto/cerrado y bloquea los lunes en el formulario).
-- **Dirección, teléfono y correo**: en las secciones `#sucursal` y `#encargo`, en la
-  barra superior y en el pie de `index.html`.
+- **Horario de atención**: objeto `HORARIO` de `main.js`. Calcula el letrero de
+  "tomando pedidos / fuera de horario" y bloquea los lunes en el formulario.
+- **Teléfono, WhatsApp y correo**: en las secciones `#pedidos` y `#encargo` y en el
+  pie de `index.html` (los enlaces `wa.me/` llevan el número sin espacios).
 - **Blog**: las tres tarjetas están escritas directamente en el HTML, dentro de `#blog`.
 
 ## Logo y colores
@@ -50,7 +55,8 @@ logo, vuelve a generarlos en 64 y 180 píxeles.
 Las fotos son de la propia panadería (extraídas de los PDF que mandó el dueño,
 recortadas y optimizadas para web). Están en `assets/img/`:
 
-- `hero.jpg` — portada
+- `hero.jpg` — portada (croissants)
+- `rellenos.jpg` — sección de rellenos
 - `obrador-1.jpg`, `obrador-2.jpg` — sección "Nosotros"
 - `blog-muerto.jpg`, `blog-rosca.jpg`, `blog-cuernito.jpg` — tarjetas del blog
 - `pan-*.jpg` — una por producto del catálogo

@@ -1,13 +1,50 @@
 /* Panadería El Europa — catálogo, buscador, horarios y encargos */
 
+// --- Rellenos del croissant -------------------------------------------------
+
+const RELLENOS = [
+  { id: 'magnum',   nombre: 'Paleta Magnum',       extra: 25, nota: 'La paleta entera dentro del croissant.' },
+  { id: 'chocolate',nombre: 'Chocolate',            extra: 10, nota: 'Chocolate derretido, el de siempre.' },
+  { id: 'pastelera',nombre: 'Crema pastelera',      extra: 10, nota: 'Hecha en casa, con vainilla.' },
+  { id: 'zarzamora',nombre: 'Zarzamora con queso',  extra: 15, nota: 'Zarzamora natural y queso crema.' }
+];
+
 // --- Catálogo (fotos reales de la panadería) --------------------------------
 
 const PANES = [
   {
+    id: 'chocolatin',
+    nombre: 'Chocolatín',
+    etiqueta: 'La especialidad',
+    descripcion: 'Masa laminada con mantequilla y su barra de chocolate adentro. Lo que mejor hacemos.',
+    precio: 28,
+    peso: '85 g',
+    foto: 'pan-chocolatin.jpg'
+  },
+  {
+    id: 'croissant',
+    nombre: 'Croissant',
+    etiqueta: 'La especialidad',
+    descripcion: 'Laminado a mano, enrollado uno por uno y horneado hasta que truena al partirlo.',
+    precio: 25,
+    peso: '80 g',
+    foto: 'pan-croissant.jpg'
+  },
+  {
+    id: 'croissant-relleno',
+    nombre: 'Croissant relleno',
+    etiqueta: 'Elige tu relleno',
+    descripcion: 'El mismo croissant, abierto y relleno al momento. Cuatro rellenos a elegir.',
+    precio: 35,
+    peso: '1 pieza',
+    foto: 'pan-relleno.jpg',
+    rellenable: true
+  },
+  {
     id: 'concha',
     nombre: 'Concha',
-    etiqueta: 'La de siempre',
-    descripcion: 'Masa suave y costra de vainilla marcada una por una. La que se acaba primero.',
+    etiqueta: null,
+    descripcion: 'Masa suave y costra de vainilla marcada una por una.',
     precio: 18,
     peso: '90 g',
     foto: 'pan-concha.jpg'
@@ -22,15 +59,6 @@ const PANES = [
     foto: 'pan-concha-choco.jpg'
   },
   {
-    id: 'cuernito',
-    nombre: 'Cuernito',
-    etiqueta: 'Recién horneado',
-    descripcion: 'Masa laminada con mantequilla, enrollada a mano. Hojaldrado y crujiente.',
-    precio: 22,
-    peso: '80 g',
-    foto: 'pan-cuernito.jpg'
-  },
-  {
     id: 'oreja',
     nombre: 'Oreja',
     etiqueta: null,
@@ -43,7 +71,7 @@ const PANES = [
     id: 'banderilla',
     nombre: 'Banderilla',
     etiqueta: null,
-    descripcion: 'Hojaldre glaseado con azúcar. Del mismo laminado que el cuernito.',
+    descripcion: 'Hojaldre glaseado con azúcar, del mismo laminado que el croissant.',
     precio: 22,
     peso: '70 g',
     foto: 'pan-banderilla.jpg'
@@ -56,15 +84,6 @@ const PANES = [
     precio: 4,
     peso: '90 g',
     foto: 'pan-bolillo.jpg'
-  },
-  {
-    id: 'fresas',
-    nombre: 'Cuernito de fresas con crema',
-    etiqueta: 'Por encargo',
-    descripcion: 'Cuernito abierto, relleno de crema batida y fresa natural. Se prepara al momento.',
-    precio: 65,
-    peso: '1 pieza',
-    foto: 'pan-fresas.jpg'
   },
   {
     id: 'muerto',
@@ -101,6 +120,18 @@ function tarjeta(pan) {
         <span class="weight">${pan.peso}</span>
       </div>
     </li>`;
+}
+
+function pintarRellenos() {
+  const grid = document.getElementById('relleno-grid');
+  if (!grid) return;
+
+  grid.innerHTML = RELLENOS.map((r) => `
+    <li class="relleno" data-relleno="${r.id}">
+      <h3>${r.nombre}</h3>
+      <p>${r.nota}</p>
+      <span class="relleno-extra">+ ${MXN.format(r.extra)}</span>
+    </li>`).join('');
 }
 
 function pintarPanes(lista = PANES) {
@@ -240,11 +271,13 @@ function actualizarEstado(ahora = new Date()) {
 
   if (tramo) {
     caja.classList.add('is-open');
-    caja.textContent = `Abierto ahora · cerramos a las ${comoHora(tramo[1])}`;
+    caja.textContent = `Tomando pedidos · hasta las ${comoHora(tramo[1])}`;
   } else {
     caja.classList.add('is-closed');
     const siguiente = proximaApertura(dia, minutos);
-    caja.textContent = siguiente ? `Cerrado · abrimos ${siguiente}` : 'Cerrado';
+    caja.textContent = siguiente
+      ? `Fuera de horario · contestamos ${siguiente}`
+      : 'Fuera de horario';
   }
 }
 
@@ -281,11 +314,29 @@ function mostrarError(campo, mensaje) {
   else campo.removeAttribute('aria-invalid');
 }
 
+function activarRellenoEnFormulario(form) {
+  const campo = document.getElementById('campo-relleno');
+  const select = form.elements.relleno;
+  if (!campo || !select) return;
+
+  select.innerHTML = RELLENOS.map(
+    (r) => `<option value="${r.id}">${r.nombre} (+ ${MXN.format(r.extra)})</option>`
+  ).join('');
+
+  const revisar = () => {
+    const pan = PANES.find((p) => p.id === form.elements.pan.value);
+    campo.hidden = !(pan && pan.rellenable);
+  };
+  revisar();
+  form.elements.pan.addEventListener('change', revisar);
+}
+
 function activarFormulario() {
   const form = document.getElementById('order-form');
   if (!form) return;
 
   const estado = document.getElementById('form-status');
+  activarRellenoEnFormulario(form);
   const fecha = form.elements.fecha;
   if (fecha) {
     fecha.min = hoyISO();
@@ -322,11 +373,16 @@ function activarFormulario() {
 
     const pan = PANES.find((p) => p.id === form.elements.pan.value);
     const cantidad = Number(form.elements.cantidad.value);
+    const relleno = pan.rellenable
+      ? RELLENOS.find((r) => r.id === form.elements.relleno.value)
+      : null;
+    const total = (pan.precio + (relleno ? relleno.extra : 0)) * cantidad;
 
     estado.className = 'form-status ok';
     estado.textContent =
-      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${pan.nombre} ` +
-      `(${MXN.format(pan.precio * cantidad)}). Te llamamos al ${form.elements.telefono.value.trim()} para confirmar.`;
+      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${pan.nombre}` +
+      `${relleno ? ` con ${relleno.nombre.toLowerCase()}` : ''} (${MXN.format(total)}). ` +
+      `Te escribimos al ${form.elements.telefono.value.trim()} para confirmar.`;
 
     form.reset();
     if (fecha) fecha.value = hoyISO();
@@ -364,6 +420,7 @@ function activarCookies() {
 
 document.addEventListener('DOMContentLoaded', () => {
   pintarPanes();
+  pintarRellenos();
   rellenarSelector();
   activarBuscador();
   activarMenu();
