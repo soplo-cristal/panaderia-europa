@@ -230,7 +230,20 @@ address { font-style: normal; }
 .hero-copy .script { color: var(--amber); }
 .hero-copy h1 { color: #fff; }
 .hero-copy .lead { font-size: 1.08rem; color: #f2e6d6; max-width: 34rem; }
-.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 2rem; }
+.hero-firma {
+  font-family: var(--font-script);
+  font-size: clamp(1.7rem, 3.4vw, 2.5rem);
+  font-weight: 600; line-height: 1.15;
+  color: var(--amber);
+  margin: .2rem 0 1.1rem;
+  max-width: 24ch;
+}
+.hero-precio {
+  margin: 0; padding-top: .9rem;
+  border-top: 1px solid rgba(255, 255, 255, .25);
+  font-size: .92rem; color: #eadbc8; max-width: 34rem;
+}
+.hero-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin-top: 1.6rem; }
 .hero-actions > .btn:first-child { background: var(--amber); border-color: var(--amber); color: var(--brand-dark); }
 .hero-actions > .btn:first-child:hover { background: #ffc669; border-color: #ffc669; color: var(--brand-dark); }
 .hero-actions .btn-outline { color: #fff; border-color: #fff; background: transparent; }

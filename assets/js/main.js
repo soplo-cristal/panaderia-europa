@@ -41,8 +41,8 @@ const PANES = [
     id: 'croissant-relleno',
     nombre: 'Croissant relleno',
     etiqueta: 'Elige tu relleno',
-    descripcion: 'El mismo croissant, relleno de lo que pidas. Nueve rellenos a elegir y ninguno cuesta extra.',
-    precio: 20,
+    descripcion: 'El mismo croissant, abierto y relleno de lo que pidas. Nueve rellenos a elegir.',
+    precio: 38,
     peso: '1 pieza',
     foto: 'pan-relleno.jpg',
     rellenable: true
