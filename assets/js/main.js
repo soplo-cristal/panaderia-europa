@@ -3,9 +3,9 @@
 // --- Rellenos del croissant -------------------------------------------------
 
 const RELLENOS = [
-  { id: 'jamon',     nombre: 'Jamón y queso',       tipo: 'salado', nota: 'El salado de la casa. Se hornea con el queso adentro.' },
+  { id: 'jamon',     nombre: 'Jamón y queso',       tipo: 'salado', precio: 25, nota: 'El salado de la casa. Se hornea con el queso adentro.' },
   { id: 'turin',     nombre: 'Chocolate Turín',     tipo: 'dulce',  nota: 'Chocolate Turín derretido, generoso.' },
-  { id: 'magnum',    nombre: 'Paleta Magnum',       tipo: 'dulce',  nota: 'La paleta entera dentro del croissant.' },
+  { id: 'magnum',    nombre: 'Paleta Magnum',       tipo: 'dulce',  precio: 45, nota: 'La paleta entera dentro del croissant.' },
   { id: 'fresas',    nombre: 'Fresas con crema',    tipo: 'dulce',  nota: 'Fresa natural y crema batida, al momento.' },
   { id: 'frambuesa', nombre: 'Frambuesa con queso', tipo: 'dulce',  nota: 'Frambuesa y queso crema, dulce y ácido.' },
   { id: 'rojos',     nombre: 'Frutos rojos',        tipo: 'dulce',  nota: 'Mezcla de frutos rojos de temporada.' },
@@ -158,6 +158,7 @@ function pintarRellenos() {
     <li class="relleno relleno-${r.tipo}" data-relleno="${r.id}">
       <h3>${r.nombre}</h3>
       <p>${r.nota}</p>
+      ${r.precio ? `<span class="relleno-precio">${MXN.format(r.precio)} la pieza</span>` : ''}
       ${r.tipo === 'salado' ? '<span class="relleno-tipo">Salado</span>' : ''}
     </li>`).join('');
 }
@@ -355,7 +356,7 @@ function activarRellenoEnFormulario(form) {
   if (!campo || !select) return;
 
   select.innerHTML = RELLENOS.map(
-    (r) => `<option value="${r.id}">${r.nombre}</option>`
+    (r) => `<option value="${r.id}">${r.nombre}${r.precio ? ` — ${MXN.format(r.precio)}` : ''}</option>`
   ).join('');
 
   const revisar = () => {
@@ -411,7 +412,9 @@ function activarFormulario() {
     const relleno = opcion.pan.rellenable
       ? RELLENOS.find((r) => r.id === form.elements.relleno.value)
       : null;
-    const total = opcion.precio * cantidad;
+    // Casi todos los rellenos van incluidos en el precio del croissant, pero
+    // alguno (jamón y queso, Magnum) tiene el suyo y sustituye al del pan.
+    const total = (relleno && relleno.precio ? relleno.precio : opcion.precio) * cantidad;
 
     estado.className = 'form-status ok';
     estado.textContent =

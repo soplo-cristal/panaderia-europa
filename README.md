@@ -2,8 +2,9 @@
 
 Sitio web de una sola página para la panadería **El Europa** (desde 2022). No hay
 sucursal: todo se hornea por encargo. La especialidad son los **chocolatines** y los
-**croissants rellenos**, ambos a precio único de $20 con cualquiera de los nueve
-rellenos, además del pan dulce de diario y el de temporada.
+**croissants rellenos**, ambos a $20 con cualquiera de los nueve rellenos (salvo
+jamón y queso a $25 y paleta Magnum a $45), además del pan dulce de diario y el de
+temporada.
 
 Secciones: barra superior, menú fijo con buscador, portada, franja de ventajas,
 historia, catálogo, rellenos, proceso, blog, cómo pedir, formulario de encargo,
@@ -32,8 +33,9 @@ python3 -m http.server 8000
 - **Rellenos del croissant**: array `RELLENOS` al principio de `assets/js/main.js`.
   Alimentan la sección "Elige tu relleno" y el selector que aparece en el formulario
   cuando se encarga un croissant relleno (el pan lo activa con `rellenable: true`).
-  Ningún relleno cobra extra: el total del encargo es precio × cantidad. Si algún día
-  alguno cuesta más, hay que volver a añadirle un campo de recargo y sumarlo al total.
+  Casi todos van incluidos en los $20 del croissant; los que cuestan distinto llevan
+  su propio campo `precio`, que sustituye al del pan al calcular el total (jamón y
+  queso $25, paleta Magnum $45).
 - **Pan, precios y descripciones**: array `PANES` al principio de `assets/js/main.js`.
   Un pan con varias versiones (la rosca por tamaño, el pan de muerto normal o relleno)
   lleva un array `variantes` en vez de `precio`; la tarjeta muestra todas y el
