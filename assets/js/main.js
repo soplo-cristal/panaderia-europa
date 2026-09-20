@@ -23,7 +23,7 @@ const PANES = [
     id: 'chocolatin',
     nombre: 'Chocolatín',
     etiqueta: 'La especialidad',
-    descripcion: 'Masa laminada con mantequilla y su barra de chocolate adentro. Lo que mejor hacemos.',
+    descripcion: 'Masa laminada con mantequilla, enrollada sobre su barra de chocolate. Lo que mejor hacemos.',
     precio: 20,
     peso: '85 g',
     foto: 'pan-chocolatin.jpg'
