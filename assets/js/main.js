@@ -52,7 +52,7 @@ const PANES = [
     nombre: 'Concha',
     etiqueta: null,
     descripcion: 'Masa suave y costra de vainilla marcada una por una.',
-    precio: 18,
+    precio: 16,
     peso: '90 g',
     foto: 'pan-concha.jpg'
   },
@@ -61,7 +61,7 @@ const PANES = [
     nombre: 'Concha de chocolate',
     etiqueta: null,
     descripcion: 'La misma masa con costra de chocolate. También la hacemos mitad y mitad.',
-    precio: 18,
+    precio: 16,
     peso: '90 g',
     foto: 'pan-concha-choco.jpg'
   },
@@ -69,19 +69,10 @@ const PANES = [
     id: 'oreja',
     nombre: 'Oreja',
     etiqueta: null,
-    descripcion: 'Hojaldre doblado y caramelizado en el horno. Dorada por fuera, suave por dentro.',
-    precio: 20,
+    descripcion: 'Hojaldre doblado y caramelizado en el horno, del mismo laminado que el croissant.',
+    precio: 16,
     peso: '60 g',
     foto: 'pan-oreja.jpg'
-  },
-  {
-    id: 'banderilla',
-    nombre: 'Banderilla',
-    etiqueta: null,
-    descripcion: 'Hojaldre glaseado con azúcar, del mismo laminado que el croissant.',
-    precio: 22,
-    peso: '70 g',
-    foto: 'pan-banderilla.jpg'
   },
   {
     id: 'bolillo',
@@ -97,22 +88,52 @@ const PANES = [
     nombre: 'Pan de muerto',
     etiqueta: 'Temporada',
     descripcion: 'Con su azúcar encima y aroma de azahar. De octubre a principios de noviembre.',
-    precio: 30,
-    peso: '150 g',
-    foto: 'pan-muerto.jpg'
+    foto: 'pan-muerto.jpg',
+    variantes: [
+      { id: 'normal',  nombre: 'Normal',  precio: 22 },
+      { id: 'relleno', nombre: 'Relleno', precio: 25 }
+    ]
   },
   {
     id: 'rosca',
     nombre: 'Rosca de reyes',
     etiqueta: 'Temporada',
-    descripcion: 'Con ate, higo y su muñequito. En enero y solo por encargo anticipado.',
-    precio: 190,
-    peso: 'mediana, 8 personas',
-    foto: 'pan-rosca.jpg'
+    descripcion: 'Rellena, con su muñequito. En enero y solo por encargo anticipado.',
+    foto: 'pan-rosca.jpg',
+    variantes: [
+      { id: 'chica',   nombre: 'Chica',   precio: 120 },
+      { id: 'mediana', nombre: 'Mediana', precio: 180 }
+    ]
   }
 ];
 
 const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
+
+// Un pan puede tener varias versiones (tamaño, relleno). El formulario las trata
+// como opciones independientes, con el valor "idDelPan:idDeLaVariante".
+function opcionesDePan(pan) {
+  return pan.variantes
+    ? pan.variantes.map((v) => ({
+        valor: `${pan.id}:${v.id}`,
+        etiqueta: `${pan.nombre} ${v.nombre.toLowerCase()}`,
+        precio: v.precio
+      }))
+    : [{ valor: pan.id, etiqueta: pan.nombre, precio: pan.precio }];
+}
+
+function buscarOpcion(valor) {
+  const [idPan] = String(valor).split(':');
+  const pan = PANES.find((p) => p.id === idPan);
+  if (!pan) return null;
+  const opcion = opcionesDePan(pan).find((o) => o.valor === valor);
+  return opcion ? { pan, ...opcion } : null;
+}
+
+function precios(pan) {
+  return pan.variantes
+    ? pan.variantes.map((v) => `<span class="variante">${v.nombre} <b>${MXN.format(v.precio)}</b></span>`).join('')
+    : `<span class="price">${MXN.format(pan.precio)}</span>`;
+}
 
 function tarjeta(pan) {
   return `
@@ -122,9 +143,9 @@ function tarjeta(pan) {
       <span class="tag${pan.etiqueta ? '' : ' tag-empty'}" ${pan.etiqueta ? '' : 'aria-hidden="true"'}>${pan.etiqueta || '—'}</span>
       <h3>${pan.nombre}</h3>
       <p class="desc">${pan.descripcion}</p>
-      <div class="meta">
-        <span class="price">${MXN.format(pan.precio)}</span>
-        <span class="weight">${pan.peso}</span>
+      <div class="meta${pan.variantes ? ' meta-variantes' : ''}">
+        ${precios(pan)}
+        ${pan.peso ? `<span class="weight">${pan.peso}</span>` : ''}
       </div>
     </li>`;
 }
@@ -156,7 +177,9 @@ function rellenarSelector() {
 
   select.innerHTML =
     '<option value="">Elige un pan…</option>' +
-    PANES.map((pan) => `<option value="${pan.id}">${pan.nombre} — ${MXN.format(pan.precio)}</option>`).join('');
+    PANES.flatMap(opcionesDePan)
+      .map((o) => `<option value="${o.valor}">${o.etiqueta} — ${MXN.format(o.precio)}</option>`)
+      .join('');
 }
 
 // --- Buscador ---------------------------------------------------------------
@@ -182,7 +205,12 @@ function activarBuscador() {
   input.addEventListener('input', () => {
     const q = normalizar(input.value);
     const lista = q
-      ? PANES.filter((pan) => normalizar(`${pan.nombre} ${pan.descripcion} ${pan.etiqueta || ''}`).includes(q))
+      ? PANES.filter((pan) =>
+          normalizar(
+            `${pan.nombre} ${pan.descripcion} ${pan.etiqueta || ''} ` +
+            (pan.variantes || []).map((v) => v.nombre).join(' ')
+          ).includes(q)
+        )
       : PANES;
 
     pintarPanes(lista);
@@ -331,8 +359,8 @@ function activarRellenoEnFormulario(form) {
   ).join('');
 
   const revisar = () => {
-    const pan = PANES.find((p) => p.id === form.elements.pan.value);
-    campo.hidden = !(pan && pan.rellenable);
+    const opcion = buscarOpcion(form.elements.pan.value);
+    campo.hidden = !(opcion && opcion.pan.rellenable);
   };
   revisar();
   form.elements.pan.addEventListener('change', revisar);
@@ -378,16 +406,16 @@ function activarFormulario() {
       return;
     }
 
-    const pan = PANES.find((p) => p.id === form.elements.pan.value);
+    const opcion = buscarOpcion(form.elements.pan.value);
     const cantidad = Number(form.elements.cantidad.value);
-    const relleno = pan.rellenable
+    const relleno = opcion.pan.rellenable
       ? RELLENOS.find((r) => r.id === form.elements.relleno.value)
       : null;
-    const total = pan.precio * cantidad;
+    const total = opcion.precio * cantidad;
 
     estado.className = 'form-status ok';
     estado.textContent =
-      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${pan.nombre}` +
+      `¡Gracias, ${form.elements.nombre.value.trim()}! Apuntado: ${cantidad} × ${opcion.etiqueta}` +
       `${relleno ? ` con ${relleno.nombre.toLowerCase()}` : ''} (${MXN.format(total)}). ` +
       `Te escribimos al ${form.elements.telefono.value.trim()} para confirmar.`;
 

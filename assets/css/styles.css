@@ -325,6 +325,12 @@ address { font-style: normal; }
   margin-top: 1rem; padding-top: .9rem; border-top: 1px solid var(--line);
 }
 .bread-card .price { font-size: 1.2rem; font-weight: 600; color: var(--brand); }
+.meta-variantes { flex-wrap: wrap; gap: .4rem 1.2rem; }
+.variante {
+  display: flex; flex-direction: column;
+  font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft);
+}
+.variante b { font-size: 1.1rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--brand); }
 .bread-card .weight { font-size: .82rem; color: var(--ink-soft); }
 .tag {
   align-self: flex-start; margin-bottom: .55rem; padding: .15rem .6rem;

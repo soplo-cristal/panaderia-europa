@@ -35,6 +35,9 @@ python3 -m http.server 8000
   Ningún relleno cobra extra: el total del encargo es precio × cantidad. Si algún día
   alguno cuesta más, hay que volver a añadirle un campo de recargo y sumarlo al total.
 - **Pan, precios y descripciones**: array `PANES` al principio de `assets/js/main.js`.
+  Un pan con varias versiones (la rosca por tamaño, el pan de muerto normal o relleno)
+  lleva un array `variantes` en vez de `precio`; la tarjeta muestra todas y el
+  formulario las ofrece como opciones sueltas, con el valor `idPan:idVariante`.
   Cada pan indica una `forma` que corresponde a una ilustración SVG del objeto `FORMAS`
   (`bolillo`, `telera`, `baguette`, `hogaza`, `molde`, `trenza`). Los precios están en
   pesos mexicanos (`Intl.NumberFormat('es-MX')`); cambia esa línea para otra moneda.
@@ -59,9 +62,9 @@ recortadas y optimizadas para web). Están en `assets/img/`:
 
 - `hero.jpg` — portada (croissants)
 - `rellenos.jpg` — sección de rellenos
-- `obrador-1.jpg`, `obrador-2.jpg` — sección "Nosotros"
 - `blog-muerto.jpg`, `blog-rosca.jpg`, `blog-cuernito.jpg` — tarjetas del blog
 - `pan-*.jpg` — una por producto del catálogo
+- `obrador-1.jpg` (chocolatines crudos) y `obrador-2.jpg` (croissants horneados)
 
 Las de portada, obrador y blog se asignan por CSS (`[data-photo="…"]`); las de
 producto van en el campo `foto` de cada pan en `main.js`. Para cambiar una,
